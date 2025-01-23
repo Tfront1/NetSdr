@@ -2,7 +2,7 @@
 
 namespace NetSdr.Client.Commands;
 
-internal static class ReceiverCommands
+public static class ReceiverCommands
 {
     public static byte[] CreateStartIqTransferCommand(bool use24Bit = false)
     {

@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using NetSdr.Client.Interfaces;
+using System.Net.Sockets;
 
 namespace NetSdr.Client;
 
