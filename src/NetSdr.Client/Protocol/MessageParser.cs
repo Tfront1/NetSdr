@@ -1,7 +1,14 @@
 ﻿namespace NetSdr.Client.Protocol;
 
+/// <summary>
+/// Parses raw message bytes into protocol-specific message components
+/// </summary>
 internal static class MessageParser
 {
+    /// <summary>
+    /// Attempts to parse raw message data into protocol components
+    /// </summary>
+    /// <returns>True if parsing successful, false otherwise</returns>
     public static bool TryParseMessage(
         byte[] data,
         out MessageHeader header,

@@ -1,5 +1,8 @@
 ﻿namespace NetSdr.Client.Protocol;
 
+/// <summary>
+/// Represents a complete control message in the NetSDR protocol
+/// </summary>
 public class ControlMessage
 {
     public MessageHeader Header { get; }
@@ -14,6 +17,9 @@ public class ControlMessage
         Parameters = parameters;
     }
 
+    /// <summary>
+    /// Converts message to byte array for transmission
+    /// </summary>
     public byte[] ToBytes()
     {
         var result = new byte[Header.Length];
@@ -31,6 +37,10 @@ public class ControlMessage
         return result;
     }
 
+    /// <summary>
+    /// Creates message from received bytes
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if data is invalid</exception> 
     public static ControlMessage FromBytes(ReadOnlyMemory<byte> data)
     {
         if (data.Length < 4)

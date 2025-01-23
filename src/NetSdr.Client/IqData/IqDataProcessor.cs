@@ -4,6 +4,9 @@ using System.Net.Sockets;
 
 namespace NetSdr.Client.IqData;
 
+/// <summary>
+/// Processes IQ data received over UDP and writes to file, stripping protocol headers
+/// </summary>
 public sealed class IqDataProcessor : IDisposable
 {
     private readonly string _outputFilePath;
@@ -16,6 +19,11 @@ public sealed class IqDataProcessor : IDisposable
     private const int HeaderSize = NetSdrDefaults.HeaderSize;
     private const int BufferSize = 65536;
 
+    /// <summary>
+    /// Initializes processor and UDP client 
+    /// </summary>
+    /// <param name="outputFilePath">Path to write IQ data</param>
+    /// <param name="port">UDP port to listen on</param>
     public IqDataProcessor(
         string outputFilePath,
         int port = NetSdrDefaults.UdpPort,
@@ -27,6 +35,10 @@ public sealed class IqDataProcessor : IDisposable
         _logger = logger;
     }
 
+    /// <summary>
+    /// Starts processing UDP data
+    /// </summary>
+    /// <exception cref="InvalidOperationException">If already running</exception>
     public void Start()
     {
         if (_processingTask != null)
@@ -86,6 +98,9 @@ public sealed class IqDataProcessor : IDisposable
         }
     }
 
+    /// <summary>
+    /// Stops processing and waits for completion
+    /// </summary>
     public async Task StopAsync(CancellationToken cancellationToken = default)
     {
         if (_processingTask == null) return;

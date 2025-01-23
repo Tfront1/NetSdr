@@ -1,5 +1,8 @@
 ﻿namespace NetSdr.Client.Protocol;
 
+/// <summary>
+/// Control item codes defined by the NetSDR protocol specification
+/// </summary>
 public enum ControlItem : ushort
 {
     ReceiverState = 0x0018,

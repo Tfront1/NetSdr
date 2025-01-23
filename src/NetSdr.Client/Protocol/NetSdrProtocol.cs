@@ -1,7 +1,13 @@
 ﻿namespace NetSdr.Client.Protocol;
 
+/// <summary>
+/// Core protocol utilities for NetSDR message handling and validation
+/// </summary>
 internal static class NetSdrProtocol
 {
+    /// <summary>
+    /// Checks if message is a NAK response
+    /// </summary>
     public static bool IsNakMessage(byte[] message)
     {
         return message != null &&
@@ -10,6 +16,9 @@ internal static class NetSdrProtocol
                message[1] == 0x00;
     }
 
+    /// <summary>
+    /// Creates acknowledgment message for data item
+    /// </summary>
     public static byte[] CreateAckMessage(byte dataItem)
     {
         var header = new MessageHeader(3, MessageType.DataItemAck);
@@ -22,6 +31,9 @@ internal static class NetSdrProtocol
         return message;
     }
 
+    /// <summary>
+    /// Checks if data packet is start of transmission
+    /// </summary>
     public static bool IsStartOfTransmission(ReadOnlySpan<byte> data)
     {
         if (data.Length < 4) return false;
@@ -30,6 +42,10 @@ internal static class NetSdrProtocol
         return data[2] == 0x00 && data[3] == 0x00;
     }
 
+    /// <summary>
+    /// Extracts sequence number from data packet
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if data too short</exception>
     public static uint GetSequenceNumber(ReadOnlySpan<byte> data)
     {
         if (data.Length < 4)

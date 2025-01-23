@@ -9,6 +9,10 @@ using NetSdr.Client.Protocol;
 
 namespace NetSdr.Client;
 
+/// <summary>
+/// Main client for interacting with NetSDR device. Handles device communication, IQ data transfer, 
+/// and command processing according to the NetSDR protocol specification.
+/// </summary>
 public class NetSdrClient : INetSdrClient
 {
     private readonly INetworkClient _networkClient;
@@ -19,6 +23,9 @@ public class NetSdrClient : INetSdrClient
 
     public bool IsConnected => _networkClient.IsConnected;
 
+    /// <summary>
+    /// Event triggered when device sends unsolicited control message
+    /// </summary>
     public event EventHandler<UnsolicitedControlEventArgs>? UnsolicitedControlReceived;
 
     public NetSdrClient(INetworkClient networkClient, ILogger? logger = null)
@@ -27,6 +34,11 @@ public class NetSdrClient : INetSdrClient
         _logger = logger;
     }
 
+    /// <summary>
+    /// Establishes connection to NetSDR device
+    /// </summary>
+    /// <param name="host">Device hostname/IP</param>
+    /// <param name="port">TCP port (default 50000)</param>
     public async Task ConnectAsync(string host, int port = NetSdrDefaults.TcpPort, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(host))
@@ -53,6 +65,9 @@ public class NetSdrClient : INetSdrClient
         }
     }
 
+    /// <summary>
+    /// Disconnects from device and cleans up resources
+    /// </summary>
     public async Task DisconnectAsync(CancellationToken cancellationToken = default)
     {
         await _connectionLock.WaitAsync(cancellationToken);
@@ -74,6 +89,9 @@ public class NetSdrClient : INetSdrClient
         }
     }
 
+    /// <summary>
+    /// Starts IQ data transfer from device over UDP
+    /// </summary>
     public async Task StartIqTransferAsync(CancellationToken cancellationToken = default)
     {
         ThrowIfNotConnected();
@@ -99,6 +117,9 @@ public class NetSdrClient : INetSdrClient
         }
     }
 
+    /// <summary>
+    /// Stops IQ data transfer and disposes UDP processor
+    /// </summary>
     public async Task StopIqTransferAsync(CancellationToken cancellationToken = default)
     {
         ThrowIfNotConnected();
@@ -124,6 +145,10 @@ public class NetSdrClient : INetSdrClient
         }
     }
 
+    /// <summary>
+    /// Sets receiver frequency in Hz
+    /// </summary>
+    /// <param name="frequency">Target frequency in Hz</param>
     public async Task SetFrequencyAsync(uint frequency, CancellationToken cancellationToken = default)
     {
         ThrowIfNotConnected();
@@ -142,6 +167,9 @@ public class NetSdrClient : INetSdrClient
         }
     }
 
+    /// <summary>
+    /// Sends command to device and processes response
+    /// </summary>
     private async Task SendCommandAsync(byte[] command, CancellationToken cancellationToken)
     {
         ThrowIfNotConnected();

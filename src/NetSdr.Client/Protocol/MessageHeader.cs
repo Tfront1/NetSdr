@@ -1,5 +1,8 @@
 ﻿namespace NetSdr.Client.Protocol;
 
+/// <summary>
+/// Represents the header of a NetSDR protocol message, containing length and type information
+/// </summary>
 public readonly struct MessageHeader
 {
     private const int LengthMask = 0x1FFF;  // 13 bits for length
@@ -18,12 +21,19 @@ public readonly struct MessageHeader
         Type = type;
     }
 
+    /// <summary>
+    /// Converts header to raw bytes for transmission
+    /// </summary>
     public byte[] ToBytes()
     {
         var value = (Length & LengthMask) | ((int)Type << TypeShift);
         return new[] { (byte)(value & 0xFF), (byte)(value >> 8) };
     }
 
+    /// <summary>
+    /// Creates header from received bytes
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if bytes are invalid</exception>
     public static MessageHeader FromBytes(ReadOnlySpan<byte> bytes)
     {
         if (bytes.Length < 2)
