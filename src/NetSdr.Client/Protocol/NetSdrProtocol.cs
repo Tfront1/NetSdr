@@ -2,9 +2,12 @@
 
 internal static class NetSdrProtocol
 {
-    public static bool IsNakMessage(ReadOnlySpan<byte> message)
+    public static bool IsNakMessage(byte[] message)
     {
-        return message.Length == 2 && message[0] == 0x02 && message[1] == 0x00;
+        return message != null &&
+               message.Length == 2 &&
+               message[0] == 0x02 &&
+               message[1] == 0x00;
     }
 
     public static byte[] CreateAckMessage(byte dataItem)
